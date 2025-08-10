@@ -1,9 +1,7 @@
 # googlecolab-python
-learning python
+# learning python
+# additional operators
 
-print("deekshika sharma")
-print("uid: 24bai70756")
-#additional operators 
 x="2"
 y=str(bool(4.8))
 print(x+y)
