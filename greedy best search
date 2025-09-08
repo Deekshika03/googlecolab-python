@@ -1,0 +1,48 @@
+import heapq
+graph = {
+    'K': {'L1': 2, 'L2': 3},   # Central Kitchen
+    'L1': {'H1': 4, 'H2': 6},
+    'L2': {'H3': 7},
+    'H1': {},
+    'H2': {},
+    'H3': {}
+}
+heuristic = {
+    'K': 7,
+    'L1': 4,
+    'L2': 2,
+    'H1': 5,
+    'H2': 3,
+    'H3': 0   # Goal
+}
+def greedy_best_first_search(start, goal):
+    visited = set()
+    priority_queue = []
+    heapq.heappush(priority_queue, (heuristic[start], start, 0))  # (h, node, cost_so_far)
+    path = []
+    total_cost = 0
+
+    while priority_queue:
+        h, node, cost_so_far = heapq.heappop(priority_queue)
+        if node in visited:
+            continue
+        print(f"Visiting {node} (h={heuristic[node]})")
+        path.append(node)
+        visited.add(node)
+        total_cost = cost_so_far
+
+        if node == goal:
+            print("\nGoal reached!")
+            return path, total_cost
+
+        for neighbor, edge_cost in graph[node].items():
+            if neighbor not in visited:
+                heapq.heappush(priority_queue, (heuristic[neighbor], neighbor, cost_so_far + edge_cost))
+
+    return None, None
+
+print("Greedy Best-First Search Traversal:\n")
+path, cost = greedy_best_first_search('K', 'H3')
+
+print("\nPath found (Greedy Best-First Search):", path)
+print("Total path cost (not guaranteed optimal):", cost)
