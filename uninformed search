@@ -1,0 +1,54 @@
+from collections import deque
+
+# Graph representation (Chandigarh University Campus - simplified)
+graph = {
+    "Gate1": ["A1", "A2"],
+    "Gate2": ["B1", "C1"],
+    "Gate3": ["D1", "Parking3"],
+    "A1": ["A2"], "A2": ["B1"], "B1": ["Library_B1", "B2"], "B2": ["C1"],
+    "C1": ["C2"], "C2": ["C3"], "C3": ["Library_C3", "D4"],
+    "D1": ["D2"], "D2": ["D3"], "D3": ["D4"], "D4": ["D5"],
+    "D5": ["D6"], "D6": ["Library_D6", "D7"], "D7": ["D8"], "D8": ["NC1"],
+    "NC1": ["NC2"], "NC2": ["NC4"], "NC4": []
+}
+
+# ---------------- BFS Traversal ----------------
+def bfs(start):
+    visited, q = set(), deque([start])
+    print("BFS:", end=" ")
+    while q:
+        node = q.popleft()
+        if node not in visited:
+            print(node, end=" ")
+            visited.add(node)
+            q.extend(graph.get(node, []))
+    print()
+
+# ---------------- DFS Traversal ----------------
+def dfs(node, visited=None):
+    if visited is None: 
+        visited=set(); print("DFS:", end=" ")
+    if node not in visited:
+        print(node, end=" ")
+        visited.add(node)
+        for n in graph.get(node, []): dfs(n, visited)
+
+# ---------------- BFS Shortest Path ----------------
+def bfs_shortest_path(start, goal):
+    q = deque([[start]])
+    visited=set()
+    while q:
+        path=q.popleft(); node=path[-1]
+        if node==goal: return path
+        if node not in visited:
+            visited.add(node)
+            for n in graph.get(node, []): q.append(path+[n])
+
+# ---------------- Driver ----------------
+print(">>> CU Campus Traversal <<<\n")
+
+bfs("Gate1")                            # BFS from Gate1
+dfs("Gate3"); print()                   # DFS from Gate3
+print("Shortest path Gate2→Library_D6:", "→".join(bfs_shortest_path("Gate2","Library_D6")))
+print("DFS Route Gate3→NC4:", "→".join(bfs_shortest_path("Gate3","NC4")))
+
