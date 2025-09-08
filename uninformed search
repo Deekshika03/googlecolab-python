@@ -1,6 +1,4 @@
 from collections import deque
-
-# Graph representation (Chandigarh University Campus - simplified)
 graph = {
     "Gate1": ["A1", "A2"],
     "Gate2": ["B1", "C1"],
@@ -11,8 +9,6 @@ graph = {
     "D5": ["D6"], "D6": ["Library_D6", "D7"], "D7": ["D8"], "D8": ["NC1"],
     "NC1": ["NC2"], "NC2": ["NC4"], "NC4": []
 }
-
-# ---------------- BFS Traversal ----------------
 def bfs(start):
     visited, q = set(), deque([start])
     print("BFS:", end=" ")
@@ -23,8 +19,6 @@ def bfs(start):
             visited.add(node)
             q.extend(graph.get(node, []))
     print()
-
-# ---------------- DFS Traversal ----------------
 def dfs(node, visited=None):
     if visited is None: 
         visited=set(); print("DFS:", end=" ")
@@ -33,7 +27,6 @@ def dfs(node, visited=None):
         visited.add(node)
         for n in graph.get(node, []): dfs(n, visited)
 
-# ---------------- BFS Shortest Path ----------------
 def bfs_shortest_path(start, goal):
     q = deque([[start]])
     visited=set()
@@ -44,11 +37,10 @@ def bfs_shortest_path(start, goal):
             visited.add(node)
             for n in graph.get(node, []): q.append(path+[n])
 
-# ---------------- Driver ----------------
-print(">>> CU Campus Traversal <<<\n")
+print("CU Campus Traversal\n")
 
-bfs("Gate1")                            # BFS from Gate1
-dfs("Gate3"); print()                   # DFS from Gate3
+bfs("Gate1")                            
+dfs("Gate3"); print()                   
 print("Shortest path Gate2→Library_D6:", "→".join(bfs_shortest_path("Gate2","Library_D6")))
 print("DFS Route Gate3→NC4:", "→".join(bfs_shortest_path("Gate3","NC4")))
 
