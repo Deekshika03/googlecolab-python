@@ -1,0 +1,49 @@
+#code
+# Step 1: Initial Data
+names = ['Arjun', 'Bina', 'Chirag', 'Divya', 'Ekta', 'Faizan', 'Gaurav', 'Hina']
+marks = [82, 91, 76, 89, 93, 72, 96, 87]
+
+print("Initial Student Names:", names)
+print("Initial Student Marks:", marks)
+print("\nTotal number of students:", len(names), "\n")
+
+# Step 2: Insert
+names.insert(3, "Isha")
+marks.insert(3, 94)
+print("After Inserting Isha:", names, marks, "\n")
+
+# Step 3: Update
+if "Faizan" in names:
+    marks[names.index("Faizan")] = 79
+    print("After Updating Faizan Marks:", marks, "\n")
+
+# Step 4: Remove
+if "Ekta" in names:
+    i = names.index("Ekta")
+    names.pop(i), marks.pop(i)
+    print("After Removing Ekta:", names, marks, "\n")
+
+# Step 5: Sort
+students = sorted(zip(names, marks), key=lambda x: x[0])
+names, marks = map(list, zip(*students))
+print("Sorted Names:", names)
+print("Sorted Marks:", marks, "\n")
+
+# Step 6: Top Score
+print("Top score is:", max(marks))
+print("Number of students with top score:", marks.count(max(marks)), "\n")
+
+# Step 7: Reverse
+names.reverse(), marks.reverse()
+print("Reversed Names:", names)
+print("Reversed Marks:", marks, "\n")
+
+# Step 8: String Operations
+for n in names:
+    print("Name:", n, "| First:", n[0], "| Last:", n[-1], "| Reversed:", n[::-1])
+print()
+
+# Step 9: Shallow Copy & Top 3
+copy_data = sorted(zip(names.copy(), marks.copy()), key=lambda x: x[1], reverse=True)[:3]
+print("Top 3 Students:", [n for n, _ in copy_data])
+print("Marks:", [m for _, m in copy_data])
