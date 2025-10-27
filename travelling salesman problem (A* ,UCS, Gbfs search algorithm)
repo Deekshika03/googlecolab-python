@@ -9,14 +9,16 @@ Courier AI must plan:
      Heuristic h(n): straight-line distance to destination
      Multi-destination delivery:
      Use TSP to compute optimal route visiting all customers once and returning to warehouse.
-concept used : 
+Concepts used:
 Heuristic Search (A*)
 Travelling Salesman Problem (TSP)
 Graph Representation (nodes, edges, weights)
-Algorithm Comparison (Greedy vs UCS vs A*)"""
+Algorithm Comparison (Greedy vs UCS vs A*)
+"""
 
 import heapq
 import itertools
+
 
 graph = {
     'Warehouse': {'A': 2, 'B': 5},
@@ -26,7 +28,6 @@ graph = {
     'D': {'B': 6, 'C': 3}
 }
 
-# distance heuristic to destination D
 heuristic = {
     'Warehouse': 7,
     'A': 6,
@@ -34,6 +35,7 @@ heuristic = {
     'C': 1,
     'D': 0
 }
+
 
 def a_star(start, goal, graph, heuristic):
     open_list = []
@@ -54,6 +56,8 @@ def a_star(start, goal, graph, heuristic):
                 heapq.heappush(open_list, (f_new, g_new, neighbor, path + [neighbor]))
     return None, float('inf'), expanded_nodes
 
+
+
 def ucs(start, goal, graph):
     open_list = []
     heapq.heappush(open_list, (0, start, [start]))
@@ -69,6 +73,7 @@ def ucs(start, goal, graph):
                 heapq.heappush(open_list, (cost + c, neighbor, path + [neighbor]))
     return None, float('inf'), expanded_nodes
 
+
 def gbfs(start, goal, graph, heuristic):
     open_list = []
     heapq.heappush(open_list, (heuristic[start], start, [start]))
@@ -78,7 +83,6 @@ def gbfs(start, goal, graph, heuristic):
         h, node, path = heapq.heappop(open_list)
         expanded_nodes.append(node)
         if node == goal:
-            # Calculate actual path cost
             total_cost = sum(graph[path[i]][path[i+1]] for i in range(len(path)-1))
             return path, total_cost, expanded_nodes
         for neighbor in graph[node]:
@@ -86,14 +90,12 @@ def gbfs(start, goal, graph, heuristic):
                 heapq.heappush(open_list, (heuristic[neighbor], neighbor, path + [neighbor]))
     return None, float('inf'), expanded_nodes
 
+
 def complete_graph(graph):
-    # Create a fully connected graph with shortest path cost between nodes
     nodes = list(graph.keys())
     complete = {node: {} for node in nodes}
     
-    # Use Dijkstra to find shortest paths between all pairs
     for src in nodes:
-        # Initialize distances
         dist = {n: float('inf') for n in nodes}
         dist[src] = 0
         visited = set()
@@ -107,14 +109,13 @@ def complete_graph(graph):
                 if dist[v] > d + cost:
                     dist[v] = d + cost
                     heapq.heappush(heap, (dist[v], v))
-        # Fill complete graph distances
         for v in nodes:
             if v != src:
                 complete[src][v] = dist[v]
     return complete
 
+
 def tsp(graph, start):
-    # Make graph fully connected using shortest paths
     full_graph = complete_graph(graph)
     nodes = list(full_graph.keys())
     nodes.remove(start)
@@ -124,12 +125,13 @@ def tsp(graph, start):
     for perm in itertools.permutations(nodes):
         cost = 0
         path = [start] + list(perm) + [start]
-        for i in range(len(path)-1):
+        for i in range(len(path) - 1):
             cost += full_graph[path[i]][path[i+1]]
         if cost < min_cost:
             min_cost = cost
             best_path = path
     return best_path, min_cost
+
 
 start = 'Warehouse'
 goal = 'D'
@@ -140,20 +142,19 @@ print("Expanded nodes:", expanded)
 print("Path:", path)
 print("Cost:", cost)
 
-print("\nUCS:")
+print("\nUniform Cost Search (UCS):")
 path_ucs, cost_ucs, expanded_ucs = ucs(start, goal, graph)
 print("Expanded nodes:", expanded_ucs)
 print("Path:", path_ucs)
 print("Cost:", cost_ucs)
 
-print("\nGreedy bfs:")
+print("\nGreedy Best-First Search:")
 path_gbfs, cost_gbfs, expanded_gbfs = gbfs(start, goal, graph, heuristic)
 print("Expanded nodes:", expanded_gbfs)
 print("Path:", path_gbfs)
 print("Cost:", cost_gbfs)
 
-print("\nTSP Travelling Salesman Problem:")
-tour, min_cost = tsp_bruteforce(graph, start)
+print("\nTravelling Salesman Problem (TSP):")
+tour, min_cost = tsp(graph, start)
 print("Tour path:", tour)
 print("Minimum cost:", min_cost)
-
