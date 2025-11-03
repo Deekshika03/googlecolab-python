@@ -1,0 +1,74 @@
+import random
+import time
+print("deekshika, 24bai70756")
+
+# Welcome message
+print("\nWelcome to Hangman Game by IT SOURCECODE")
+name = input("Enter your name: ")
+print("Hello", name + "! Best of Luck!")
+time.sleep(1)
+print("The game is about to start!\nLet's play Hangman!")
+time.sleep(1)
+
+# Main game function
+def main():
+    global word, display, already_guessed, count
+    words = ["image", "border", "film", "promise", "kids", "lungs", "doll", "rhyme", "damage", "plants"]
+    word = random.choice(words)
+    display = "_" * len(word)
+    already_guessed = []
+    count = 0
+    hangman()
+
+# Replay function
+def play_loop():
+    play_game = input("Do you want to play again? (y/n): ").lower()
+    if play_game == "y":
+        main()
+    else:
+        print("Thanks for playing! We expect you back again!")
+        exit()
+
+# Main game logic
+def hangman():
+    global count, display, word, already_guessed
+    limit = 5
+    guess = input("\nThis is the Hangman Word: " + display + "\nEnter your guess: ").lower()
+
+    if len(guess) != 1 or not guess.isalpha():
+        print("Invalid input, try again!")
+        hangman()
+    elif guess in already_guessed:
+        print("You already guessed that letter. Try another!")
+        hangman()
+    elif guess in word:
+        already_guessed.append(guess)
+        for i in range(len(word)):
+            if word[i] == guess:
+                display = display[:i] + guess + display[i+1:]
+        print(display)
+        if "_" not in display:
+            print("\nCongrats! You guessed the word correctly!")
+            play_loop()
+        else:
+            hangman()
+    else:
+        count += 1
+        print("Wrong guess. " + str(limit - count) + " guesses remaining.")
+        stages = [
+            "",
+            "   |\n   |\n   |\n   |",
+            "   |---|\n   |   O\n   |\n   |",
+            "   |---|\n   |   O\n   |   |\n   |",
+            "   |---|\n   |   O\n   |  /|\\\n   |",
+            "   |---|\n   |   O\n   |  /|\\\n   |  / \\"
+        ]
+        print(stages[count])
+        if count == limit:
+            print("\nYou are hanged!!! The word was:", word)
+            play_loop()
+        else:
+            hangman()
+
+# Start game
+main()
