@@ -1,0 +1,48 @@
+# Monkey–Banana Problem (without poodle)
+# Simple state-space representation
+
+class State:
+    def __init__(self, monkey, box, banana, monkey_height, box_height, has_banana=False):
+        self.monkey = monkey        # Monkey position
+        self.box = box              # Box position
+        self.banana = banana        # Banana position
+        self.monkey_height = monkey_height
+        self.box_height = box_height
+        self.has_banana = has_banana
+
+    def __repr__(self):
+        return f"(Monkey={self.monkey}, Box={self.box}, Height={self.monkey_height}, HasBanana={self.has_banana})"
+
+def monkey_banana():
+    # Initial state
+    state = State(monkey="A", box="B", banana="C", monkey_height=0, box_height=2)
+
+    steps = []
+
+    # Step 1: Monkey goes to box
+    state.monkey = "B"
+    steps.append("Monkey moves to Box (Position B)")
+
+    # Step 2: Monkey pushes box under banana
+    state.box = "C"
+    state.monkey = "C"
+    steps.append("Monkey pushes Box to Banana (Position C)")
+
+    # Step 3: Monkey climbs the box
+    state.monkey_height = state.box_height
+    steps.append("Monkey climbs onto the Box")
+
+    # Step 4: Monkey grasps the banana
+    if state.monkey == state.banana and state.monkey_height == state.box_height:
+        state.has_banana = True
+        steps.append("Monkey grabs the Banana!")
+
+    # Print steps
+    print("Steps to solve the Monkey–Banana problem:\n")
+    for i, s in enumerate(steps, 1):
+        print(f"{i}. {s}")
+
+    print("\nFinal State:", state)
+
+# Run
+monkey_banana()
