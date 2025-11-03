@@ -1,0 +1,48 @@
+from heapq import heappush, heappop
+print("kundan, 24bai70745")
+
+goal = [[1,2,3],[4,5,6],[7,8,0]]
+moves = [(-1,0),(1,0),(0,-1),(0,1)]
+
+def manhattan(s):
+    d=0
+    for i in range(3):
+        for j in range(3):
+            v=s[i][j]
+            if v:
+                r,c=(v-1)//3,(v-1)%3
+                d+=abs(r-i)+abs(c-j)
+    return d
+
+def find0(s):
+    for i in range(3):
+        for j in range(3):
+            if s[i][j]==0: return i,j
+
+def move(s,r,c,nr,nc):
+    t=[row[:] for row in s]
+    t[r][c],t[nr][nc]=t[nr][nc],t[r][c]
+    return t
+
+def a_star(start):
+    pq=[]; heappush(pq,(manhattan(start),0,start,[]))
+    seen=set()
+    while pq:
+        f,g,s,p=heappop(pq)
+        if s==goal: return p+[s]
+        key=tuple(sum(s,[]))
+        if key in seen: continue
+        seen.add(key)
+        r,c=find0(s)
+        for dr,dc in moves:
+            nr,nc=r+dr,c+dc
+            if 0<=nr<3 and 0<=nc<3:
+                ns=move(s,r,c,nr,nc)
+                heappush(pq,(g+1+manhattan(ns),g+1,ns,p+[s]))
+
+start=[[1,2,3],[4,0,6],[7,5,8]]
+sol=a_star(start)
+for step in sol:
+    for row in step: print(row)
+    print()
+
