@@ -1,0 +1,80 @@
+# Tic-Tac-Toe Program using random number in Python
+
+# Importing required libraries
+import numpy as np
+import random
+from time import sleep
+
+# Create an empty 3x3 board
+def create_board():
+    return np.array([[0, 0, 0],
+                     [0, 0, 0],
+                     [0, 0, 0]])
+
+# Check for empty places on the board
+def possibilities(board):
+    l = []
+    for i in range(len(board)):
+        for j in range(len(board)):
+            if board[i][j] == 0:
+                l.append((i, j))
+    return l
+
+# Randomly select a place for the player
+def random_place(board, player):
+    selection = possibilities(board)
+    current_loc = random.choice(selection)
+    board[current_loc] = player
+    return board
+
+# Check if a player has won in any row
+def row_win(board, player):
+    for x in range(len(board)):
+        if all(board[x, y] == player for y in range(len(board))):
+            return True
+    return False
+
+# Check if a player has won in any column
+def col_win(board, player):
+    for x in range(len(board)):
+        if all(board[y, x] == player for y in range(len(board))):
+            return True
+    return False
+
+# Check if a player has won diagonally
+def diag_win(board, player):
+    if all(board[i, i] == player for i in range(len(board))):
+        return True
+    if all(board[i, len(board)-i-1] == player for i in range(len(board))):
+        return True
+    return False
+
+# Evaluate if there is a winner or tie
+def evaluate(board):
+    winner = 0
+    for player in [1, 2]:
+        if (row_win(board, player) or col_win(board, player) or diag_win(board, player)):
+            winner = player
+    if np.all(board != 0) and winner == 0:
+        winner = -1
+    return winner
+
+# Main function to play the game
+def play_game():
+    board, winner, counter = create_board(), 0, 1
+    print(board)
+    sleep(1)
+    while winner == 0:
+        for player in [1, 2]:
+            board = random_place(board, player)
+            print(f"\nBoard after {counter} move:")
+            print(board)
+            sleep(1)
+            counter += 1
+            winner = evaluate(board)
+            if winner != 0:
+                break
+    return winner
+
+# Driver Code
+print("Winner is:", play_game())
