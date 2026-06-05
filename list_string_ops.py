@@ -98,6 +98,11 @@ print(s[:1])   # a
 
 #################################################################################
 
+# reverse a string using string slicing
+class Solution:
+    def reverseString(self, s: List[str]) -> None:
+        s[:] = s[::-1]
+
 #isomorphic string (leetcode problem no. 205)
 class Solution:
     def isIsomorphic(self, s: str, t: str) -> bool:
