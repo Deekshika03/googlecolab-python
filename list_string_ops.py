@@ -95,3 +95,13 @@ print(s[2:7])   # cdefg
 print(s[:7])   # abcdefg
 print(s[2:])   # cdefghij
 print(s[:1])   # a
+
+#################################################################################
+
+#isomorphic string (leetcode problem no. 205)
+class Solution:
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        return len(set(zip(s, t))) == len(set(s)) == len(set(t)) 
+#using set and zip() python function
+#zip() is a Python ka function hai jo do ya zyada lists/strings ko pair bana kar combine karta hai.
+#set() duplicates hata deta hai.
